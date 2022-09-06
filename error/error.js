@@ -1,7 +1,7 @@
 const sendError = (err, res, errMessage) => {
   let ERROR_COD = 500;
 
-  if (err.name === 'ValidationError') {
+  if (err.name === 'ValidationError' || err.name === 'CastError') {
     ERROR_COD = 400;
     return res.status(ERROR_COD).send(
       { message: `Произошла ошибка ${ERROR_COD}. Переданы некорректные данные ${errMessage}.` }
