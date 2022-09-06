@@ -1,0 +1,34 @@
+{
+  "name": "express-mesto-gha",
+  "version": "0.0.1",
+  "description": "Проект Mesto фронтенд + бэкенд",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "lint": "npx eslint",
+    "dev": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lexproject/express-mesto-gha.git"
+  },
+  "keywords": [],
+  "author": "Ojog Victor",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lexproject/express-mesto-gha/issues"
+  },
+  "homepage": "https://github.com/lexproject/express-mesto-gha#readme",
+  "devDependencies": {
+    "concurrently": "^7.3.0",
+    "eslint": "^8.23.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "nodemon": "^2.0.19"
+  },
+  "dependencies": {
+    "body-parser": "^1.20.0",
+    "express": "^4.18.1",
+    "mongoose": "^6.5.4"
+  }
+}
