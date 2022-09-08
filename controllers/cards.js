@@ -19,7 +19,7 @@ module.exports.delCard = (req, res) => {
   Card.findByIdAndRemove(req.params.cardId)
     .then((card) => {
       if (!card) { return Promise.reject(cardNotFaund); }
-      res.send({ message: `Карточка ${card.name} была успешно удалена с сервера` });
+      return res.send({ message: `Карточка ${card.name} была успешно удалена с сервера` });
     })
     .catch((err) => sendError(err, res, ''));
 };
@@ -32,7 +32,7 @@ module.exports.likeCard = (req, res) => {
     { new: true, runValidators: true },
   ).then((card) => {
     if (!card) { return Promise.reject(likesNotFaund); }
-    res.send({ data: card });
+    return res.send({ data: card });
   })
     .catch((err) => sendError(err, res, 'для постановки лайка'));
 };
@@ -45,7 +45,7 @@ module.exports.dislikeCard = (req, res) => {
     { new: true, runValidators: true },
   ).then((card) => {
     if (!card) { return Promise.reject(likesNotFaund); }
-    res.send({ data: card });
+    return res.send({ data: card });
   })
     .catch((err) => sendError(err, res, 'для снятии лайка'));
 };
