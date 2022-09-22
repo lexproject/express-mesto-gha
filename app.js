@@ -7,7 +7,11 @@ const helmet = require('helmet');
 const { createUser, login } = require('./controllers/users');
 const auth = require('./middlewares/auth');
 const error = require('./middlewares/error');
-const { userDataValidate } = require('./utils/validate');
+const {
+  userDataValidate,
+  loginValidate,
+  avatarValidate,
+} = require('./utils/validate');
 
 const { PORT = 3000 } = process.env;
 const app = express();
@@ -17,8 +21,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 mongoose.connect('mongodb://localhost:27017/mestodb');
-app.post('/signin', userDataValidate, login);
-app.post('/signup', userDataValidate, createUser);
+app.post('/signin', loginValidate, login);
+app.post('/signup', userDataValidate, avatarValidate, loginValidate, createUser);
 app.use(auth);
 app.use('/users', require('./routes/users'));
 app.use('/cards', require('./routes/cards'));

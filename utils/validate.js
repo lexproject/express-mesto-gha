@@ -1,6 +1,11 @@
 const { celebrate, Joi } = require('celebrate');
 
-const paramsValidate = celebrate({
+const userIdValidate = celebrate({
+  params: Joi.object().keys({
+    userId: Joi.string().length(24),
+  }),
+});
+const cardIdValidate = celebrate({
   params: Joi.object().keys({
     cardId: Joi.string().length(24),
   }),
@@ -13,11 +18,26 @@ const cardValidate = celebrate({
 });
 const userDataValidate = celebrate({
   body: Joi.object().keys({
-    email: Joi.string().required().email(),
-    password: Joi.string().required().min(6),
     name: Joi.string().min(2).max(30),
     about: Joi.string().min(2).max(30),
+  }).unknown(true),
+});
+const avatarValidate = celebrate({
+  body: Joi.object().keys({
     avatar: Joi.string().pattern(/^https?:\/\/[a-z0-9]+([-.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/),
   }).unknown(true),
 });
-module.exports = { cardValidate, paramsValidate, userDataValidate };
+const loginValidate = celebrate({
+  body: Joi.object().keys({
+    email: Joi.string().required().email(),
+    password: Joi.string().required().min(6),
+  }).unknown(true),
+});
+module.exports = {
+  cardValidate,
+  cardIdValidate,
+  userDataValidate,
+  userIdValidate,
+  avatarValidate,
+  loginValidate,
+};
