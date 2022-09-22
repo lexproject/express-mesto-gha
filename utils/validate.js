@@ -17,7 +17,7 @@ const userDataValidate = celebrate({
     password: Joi.string().required().min(6),
     name: Joi.string().min(2).max(30),
     about: Joi.string().min(2).max(30),
-    avatar: Joi.string(),
+    avatar: Joi.string().pattern(/^https?:\/\/[a-z0-9]+([-.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/),
   }).unknown(true),
 });
 module.exports = { cardValidate, paramsValidate, userDataValidate };

@@ -42,6 +42,9 @@ const userSchema = new mongoose.Schema({
       message: 'Введённое поле должно быть ссылкой на файл изображения!',
     },
   },
+}, {
+  toObject: { useProjection: true, versionKey: false },
+  toJSON: { useProjection: true, versionKey: false },
 });
 
 userSchema.statics.findUserByCredentials = function findUserByCredentials(email, password) {
