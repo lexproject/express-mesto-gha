@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+const { cardNotFaund } = require('../errors/notFaundError');
+const { permisionError } = require('../errors/permisionError');
 
 const cardSchema = new mongoose.Schema({
   name: {
@@ -27,5 +29,19 @@ const cardSchema = new mongoose.Schema({
     default: Date.now,
   },
 });
+
+cardSchema.statics.verificateCardByUser = function verificateCardByUser(cardId, userId) {
+  return this.findById(cardId)
+    .then((card) => {
+      if (!card) {
+        return Promise.reject(cardNotFaund);
+      }
+      if (userId !== card.owner._id.toString()) {
+        return Promise.reject(permisionError);
+      }
+      return this.findByIdAndRemove(cardId)
+        .then((cardDeleted) => cardDeleted);
+    });
+};
 
 module.exports = mongoose.model('card', cardSchema);

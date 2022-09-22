@@ -1,30 +1,31 @@
 const Card = require('../models/card');
-const { sendError, cardNotFaund, likesNotFaund } = require('../error/error');
+const { cardNotFaund, likesNotFaund } = require('../errors/notFaundError');
 
-module.exports.createCard = (req, res) => {
+module.exports.createCard = (req, res, next) => {
   const { name, link } = req.body;
   Card.create({ name, link, owner: req.user._id })
     .then((card) => res.send({ data: card }))
-    .catch((err) => sendError(err, res, 'при создании карточки'));
+    .catch(next);
 };
 
-module.exports.getCard = (req, res) => {
+module.exports.getCard = (req, res, next) => {
   Card.find({})
     .populate('owner')
     .then((card) => res.send({ data: card }))
-    .catch((err) => sendError(err, res, ''));
+    .catch(next);
 };
 
-module.exports.delCard = (req, res) => {
-  Card.findByIdAndRemove(req.params.cardId)
+module.exports.delCard = (req, res, next) => {
+  const { cardId } = req.params;
+  return Card.verificateCardByUser(cardId, req.user._id)
     .then((card) => {
       if (!card) { return Promise.reject(cardNotFaund); }
       return res.send({ message: `Карточка ${card.name} была успешно удалена с сервера` });
     })
-    .catch((err) => sendError(err, res, ''));
+    .catch(next);
 };
 
-module.exports.likeCard = (req, res) => {
+module.exports.likeCard = (req, res, next) => {
   Card.findByIdAndUpdate(
     req.params.cardId,
     { $addToSet: { likes: req.user._id } },
@@ -34,10 +35,10 @@ module.exports.likeCard = (req, res) => {
     if (!card) { return Promise.reject(likesNotFaund); }
     return res.send({ data: card });
   })
-    .catch((err) => sendError(err, res, 'для постановки лайка'));
+    .catch(next);
 };
 
-module.exports.dislikeCard = (req, res) => {
+module.exports.dislikeCard = (req, res, next) => {
   Card.findByIdAndUpdate(
     req.params.cardId,
     { $pull: { likes: req.user._id } },
@@ -47,5 +48,5 @@ module.exports.dislikeCard = (req, res) => {
     if (!card) { return Promise.reject(likesNotFaund); }
     return res.send({ data: card });
   })
-    .catch((err) => sendError(err, res, 'для снятии лайка'));
+    .catch(next);
 };
