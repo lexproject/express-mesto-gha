@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const { errors } = require('celebrate');
+const error = require('../middlewares/error');
 const { defaultNotFaund } = require('../errors/notFaundError');
 const userRouter = require('./users');
 const cardRouter = require('./cards');
@@ -19,5 +20,6 @@ router.use('/cards', cardRouter);
 
 router.use(errors());
 router.use((req, res, next) => { next(defaultNotFaund); });
+router.use(error);
 
 module.exports = router;

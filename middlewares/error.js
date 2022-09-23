@@ -6,5 +6,6 @@ module.exports = ((err, req, res, next) => {
       ? `На сервере произошла ошибка ${statusCode}, сервер не может обработать запрос. ${message}`
       : `Ошибка ${statusCode}. ${message}`,
   });
+
   next();
 });
