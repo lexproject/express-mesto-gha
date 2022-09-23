@@ -1,11 +1,22 @@
 const Card = require('../models/card');
 const { cardNotFaund, likesNotFaund } = require('../errors/notFaundError');
+const {
+  cardCreateError,
+  cardLikeError,
+  cardDisLikeError,
+} = require('../errors/dataError');
 
 module.exports.createCard = (req, res, next) => {
   const { name, link } = req.body;
   Card.create({ name, link, owner: req.user._id })
-    .then((card) => res.send({ data: card }))
-    .catch(next);
+    .then((card) => res.status(201).send({ data: card }))
+    .catch((err) => {
+      if (name === 'ValidationError' || name === 'CastError') {
+        next(cardCreateError);
+      } else {
+        next(err);
+      }
+    });
 };
 
 module.exports.getCard = (req, res, next) => {
@@ -35,7 +46,13 @@ module.exports.likeCard = (req, res, next) => {
     if (!card) { return Promise.reject(likesNotFaund); }
     return res.send({ data: card });
   })
-    .catch(next);
+    .catch((err) => {
+      if (err.name === 'ValidationError' || err.name === 'CastError') {
+        next(cardLikeError);
+      } else {
+        next(err);
+      }
+    });
 };
 
 module.exports.dislikeCard = (req, res, next) => {
@@ -48,5 +65,11 @@ module.exports.dislikeCard = (req, res, next) => {
     if (!card) { return Promise.reject(likesNotFaund); }
     return res.send({ data: card });
   })
-    .catch(next);
+    .catch((err) => {
+      if (err.name === 'ValidationError' || err.name === 'CastError') {
+        next(cardDisLikeError);
+      } else {
+        next(err);
+      }
+    });
 };

@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const validator = require('validator');
 const { cardNotFaund } = require('../errors/notFaundError');
 const { permisionError } = require('../errors/permisionError');
 
@@ -12,6 +13,12 @@ const cardSchema = new mongoose.Schema({
   link: {
     type: String,
     required: true,
+    validate: {
+      validator(v) {
+        return validator.isURL(v);
+      },
+      message: 'Введённое поле должно быть ссылкой!',
+    },
   },
   owner: {
     type: mongoose.Schema.Types.ObjectId,

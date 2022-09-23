@@ -2,6 +2,12 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const User = require('../models/user');
 const { userNotFaund } = require('../errors/notFaundError');
+const { dubleEmailError } = require('../errors/conflictError');
+const {
+  userCreateError,
+  avatarUpdateError,
+  userUpdateError,
+} = require('../errors/dataError');
 
 module.exports.login = (req, res, next) => {
   const {
@@ -33,7 +39,15 @@ module.exports.createUser = (req, res, next) => {
       email, password: hash, name, about, avatar,
     }))
     .then((user) => res.send({ data: user }))
-    .catch(next);
+    .catch((err) => {
+      if (err.code === 11000) {
+        next(dubleEmailError);
+      } else if (name === 'ValidationError' || name === 'CastError') {
+        next(userCreateError);
+      } else {
+        next(err);
+      }
+    });
 };
 
 module.exports.getUser = (req, res, next) => {
@@ -67,7 +81,13 @@ module.exports.updateUser = (req, res, next) => {
       if (!user) { return Promise.reject(userNotFaund); }
       return res.send({ data: user });
     })
-    .catch(next);
+    .catch((err) => {
+      if (err.name === 'ValidationError' || err.name === 'CastError') {
+        next(avatarUpdateError);
+      } else {
+        next(err);
+      }
+    });
 };
 
 module.exports.updateUserAvatar = (req, res, next) => {
@@ -77,5 +97,11 @@ module.exports.updateUserAvatar = (req, res, next) => {
       if (!user) { return Promise.reject(userNotFaund); }
       return res.send({ data: user });
     })
-    .catch((err) => next(err));
+    .catch((err) => {
+      if (err.name === 'ValidationError' || err.name === 'CastError') {
+        next(userUpdateError);
+      } else {
+        next(err);
+      }
+    });
 };
