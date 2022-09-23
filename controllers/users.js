@@ -27,7 +27,13 @@ module.exports.login = (req, res, next) => {
       });
       res.send({ message: 'Аутентификация прошла успешно' });
     })
-    .catch(next);
+    .catch((err) => {
+      if (err.name === 'ValidationError' || err.name === 'CastError') {
+        next(userCreateError);
+      } else {
+        next(err);
+      }
+    });
 };
 
 module.exports.createUser = (req, res, next) => {

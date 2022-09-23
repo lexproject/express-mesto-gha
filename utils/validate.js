@@ -27,10 +27,19 @@ const avatarValidate = celebrate({
     avatar: Joi.string().pattern(/^https?:\/\/[a-z0-9]+([-.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/),
   }),
 });
-const loginValidate = celebrate({
+const signupValidate = celebrate({
   body: Joi.object().keys({
     email: Joi.string().required().email(),
     password: Joi.string().required(),
+    name: Joi.string().min(2).max(30),
+    about: Joi.string().min(2).max(30),
+    avatar: Joi.string().pattern(/^https?:\/\/[a-z0-9]+([-.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/),
+  }),
+});
+const signinValidate = celebrate({
+  body: Joi.object().keys({
+    name: Joi.string().min(2).max(30),
+    about: Joi.string().min(2).max(30),
   }),
 });
 module.exports = {
@@ -39,5 +48,6 @@ module.exports = {
   userDataValidate,
   userIdValidate,
   avatarValidate,
-  loginValidate,
+  signupValidate,
+  signinValidate,
 };
