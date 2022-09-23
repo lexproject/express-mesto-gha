@@ -5,6 +5,7 @@ class DataError extends Error {
     this.statusCode = 400;
   }
 }
+const userLoginError = new DataError('Переданы некорректные данные при авторизации');
 const userCreateError = new DataError('Переданы некорректные данные при создании пользователя');
 const avatarUpdateError = new DataError('Переданы некорректные данные при обновлении аватара');
 const userUpdateError = new DataError('Переданы некорректные данные при обновлении пользователя');
@@ -18,4 +19,5 @@ module.exports = {
   cardCreateError,
   cardLikeError,
   cardDisLikeError,
+  userLoginError,
 };

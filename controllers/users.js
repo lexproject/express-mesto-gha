@@ -7,6 +7,7 @@ const {
   userCreateError,
   avatarUpdateError,
   userUpdateError,
+  userLoginError,
 } = require('../errors/dataError');
 
 module.exports.login = (req, res, next) => {
@@ -29,7 +30,7 @@ module.exports.login = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError' || err.name === 'CastError') {
-        next(userCreateError);
+        next(userLoginError);
       } else {
         next(err);
       }
