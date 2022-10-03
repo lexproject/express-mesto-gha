@@ -21,7 +21,6 @@ module.exports.createCard = (req, res, next) => {
 
 module.exports.getCard = (req, res, next) => {
   Card.find({})
-    .populate('owner')
     .then((card) => res.send({ data: card }))
     .catch(next);
 };
@@ -31,7 +30,7 @@ module.exports.delCard = (req, res, next) => {
   return Card.verificateCardByUser(cardId, req.user._id)
     .then((card) => {
       if (!card) { return Promise.reject(cardNotFaund); }
-      return res.send({ message: `Карточка ${card.name} была успешно удалена с сервера` });
+      return res.send({ message: `Карточка ${card.name} была успешно удалена` });
     })
     .catch(next);
 };
@@ -40,7 +39,6 @@ module.exports.likeCard = (req, res, next) => {
   Card.findByIdAndUpdate(
     req.params.cardId,
     { $addToSet: { likes: req.user._id } },
-
     { new: true, runValidators: true },
   ).then((card) => {
     if (!card) { return Promise.reject(likesNotFaund); }
@@ -59,7 +57,6 @@ module.exports.dislikeCard = (req, res, next) => {
   Card.findByIdAndUpdate(
     req.params.cardId,
     { $pull: { likes: req.user._id } },
-
     { new: true, runValidators: true },
   ).then((card) => {
     if (!card) { return Promise.reject(likesNotFaund); }

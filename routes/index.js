@@ -10,6 +10,9 @@ const {
 
 router.post('/signin', signinValidate, login);
 router.post('/signup', signupValidate, createUser);
+router.get('/signout', (req, res) => {
+  res.clearCookie('jwt').send({ message: 'Выход' });
+});
 router.use(auth);
 router.use('/users', userRouter);
 router.use('/cards', cardRouter);
