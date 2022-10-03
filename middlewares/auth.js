@@ -9,7 +9,7 @@ module.exports = (req, res, next) => {
     throw autorizationError;
   } else {
     try {
-      payload = jwt.verify(token, (NODE_ENV === 'production') ? JWT_SECRET : 'dev');
+      payload = jwt.verify(token, NODE_ENV === 'production' ? JWT_SECRET : 'dev');
     } catch (err) {
       next(tokenError);
     }
